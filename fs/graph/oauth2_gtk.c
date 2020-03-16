@@ -37,8 +37,7 @@ char *webkit_auth_window(char *auth_url) {
     gtk_container_add(GTK_CONTAINER(auth_window), GTK_WIDGET(web_view));
     webkit_web_view_load_uri(web_view, auth_url);
 
-    char auth_redirect_value[2048];
-    auth_redirect_value[0] = '\0';
+    char auth_redirect_value[2048] = "";
     g_signal_connect(web_view, "load-changed", G_CALLBACK(web_view_load_changed),
                      &auth_redirect_value);
     g_signal_connect(auth_window, "destroy", G_CALLBACK(destroy_window), web_view);
