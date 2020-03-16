@@ -14,7 +14,7 @@ else
 endif
 
 
-onedriver: $(shell find fs/ -type f) logger/*.go cmd/onedriver/*.go
+onedriver: $(shell find fs/ -type f) gtk/* logger/*.go cmd/onedriver/*.go
 	go build -ldflags="-X main.commit=$(shell git rev-parse HEAD)" ./cmd/onedriver
 
 

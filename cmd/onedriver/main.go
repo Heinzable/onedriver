@@ -15,6 +15,7 @@ import (
 	"github.com/hanwen/go-fuse/v2/fuse"
 	odfs "github.com/jstaf/onedriver/fs"
 	"github.com/jstaf/onedriver/fs/graph"
+	"github.com/jstaf/onedriver/gtk"
 	"github.com/jstaf/onedriver/logger"
 	log "github.com/sirupsen/logrus"
 	flag "github.com/spf13/pflag"
@@ -96,17 +97,30 @@ func main() {
 
 	// determine mountpoint
 	var mountpoint string
-	if len(flag.Args()) != 1 {
-		// no mountpoint provided
-		m, err := ioutil.ReadFile(filepath.Join(dir, "mountpoint"))
-		if err != nil {
-			log.Info("No mount specified and no prior mountpoint found, exiting.")
-			flag.Usage()
-			os.Exit(1)
-		}
-		mountpoint = string(m)
-	} else {
+	if len(flag.Args()) > 0 {
 		mountpoint = flag.Arg(0)
+	} else {
+		// no mountpoint provided, do we have it cached somewhere?
+		if m, err := ioutil.ReadFile(filepath.Join(dir, "mountpoint")); err == nil {
+			mountpoint = string(m)
+		} else {
+			mountpoint = gtk.FolderChooser("Select a mountpoint") // nope
+		}
+	}
+
+	// check that the mountpoint is actually valid
+	st, err := os.Stat(mountpoint)
+	if err != nil || !st.IsDir() {
+		os.Remove(filepath.Join(dir, "mountpoint"))
+		log.WithField(
+			"mountpoint", mountpoint,
+		).Fatal("Mountpoint did not exist or was not a directory.")
+	}
+	if res, _ := ioutil.ReadDir(mountpoint); len(res) > 0 {
+		os.Remove(filepath.Join(dir, "mountpoint"))
+		log.WithField(
+			"mountpoint", mountpoint,
+		).Fatal("Mountpoint must be empty.")
 	}
 	ioutil.WriteFile(filepath.Join(dir, "mountpoint"), []byte(mountpoint), 0700)
 
