@@ -3,6 +3,7 @@ compile_flags.txt
 .commit
 .date
 mount/
+build/
 *.json
 *.bak
 *.log*
@@ -19,6 +20,7 @@ mount/
 # do not include binaries, but do include sources
 onedriver
 onedriver-headless
+onedriver-launcher
 onedriver-*/
 !cmd/onedriver
 vendor/
