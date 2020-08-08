@@ -27,6 +27,9 @@ CFLAGS := $(INC_FLAGS) $(shell pkg-config --cflags $(DEPS))
 LDFLAGS := $(shell pkg-config --libs $(DEPS))
 
 
+all: onedriver onedriver-launcher
+
+
 onedriver: $(shell find fs/ -type f) logger/*.go cmd/onedriver/*.go
 	go build -ldflags="-X main.commit=$(shell git rev-parse HEAD)" ./cmd/onedriver
 
@@ -36,8 +39,7 @@ onedriver-headless: $(shell find fs/ -type f) logger/*.go cmd/onedriver/*.go
 
 
 # run all tests, build all artifacts, compute checksums for release
-all: test checksums.txt
-checksums.txt: onedriver-headless onedriver-$(VERSION).tar.gz onedriver-$(RPM_FULL_VERSION).x86_64.rpm onedriver_$(VERSION)-$(RELEASE)_amd64.deb
+checksums.txt: test onedriver-headless onedriver-$(VERSION).tar.gz onedriver-$(RPM_FULL_VERSION).x86_64.rpm onedriver_$(VERSION)-$(RELEASE)_amd64.deb
 	sha256sum $^ > checksums.txt
 
 
