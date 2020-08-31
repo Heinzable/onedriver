@@ -21,6 +21,7 @@ build/
 onedriver
 onedriver-headless
 onedriver-launcher
+c-tests
 onedriver-*/
 !cmd/onedriver
 vendor/
