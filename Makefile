@@ -77,7 +77,6 @@ build/c-test: $(TEST_OBJS)
 
 
 c-test: build/c-test
-	fusermount -uz mount/ || true
 	$<
 
 
