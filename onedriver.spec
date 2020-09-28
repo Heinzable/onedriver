@@ -26,6 +26,7 @@ break.
 
 %build
 GOOS=linux go build -mod=vendor -ldflags="-X main.commit=$(cat .commit)" ./cmd/%{name}
+make onedriver-launcher
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -34,7 +35,7 @@ mkdir -p %{buildroot}/usr/share/icons/%{name}
 mkdir -p %{buildroot}/usr/share/applications
 mkdir -p %{buildroot}/usr/lib/systemd/user
 cp %{name} %{buildroot}/%{_bindir}
-cp resources/%{name}-launcher.sh %{buildroot}/%{_bindir}
+cp %{name}-launcher %{buildroot}/%{_bindir}
 cp resources/%{name}.png %{buildroot}/usr/share/icons/%{name}
 cp resources/%{name}.svg %{buildroot}/usr/share/icons/%{name}
 cp resources/%{name}.desktop %{buildroot}/usr/share/applications
@@ -45,13 +46,18 @@ cp resources/%{name}@.service %{buildroot}/usr/lib/systemd/user
 %files
 %defattr(-,root,root,-)
 %attr(755, root, root) %{_bindir}/%{name}
-%attr(755, root, root) %{_bindir}/%{name}-launcher.sh
+%attr(755, root, root) %{_bindir}/%{name}-launcher
 %attr(644, root, root) /usr/share/icons/%{name}/%{name}.png
 %attr(644, root, root) /usr/share/icons/%{name}/%{name}.svg
 %attr(644, root, root) /usr/share/applications/%{name}.desktop
 %attr(644, root, root) /usr/lib/systemd/user/%{name}@.service
 
 %changelog
+* Sun Sep 27 2020 Jeff Stafford <jeff.stafford@protonmail.com> - 0.10.0
+- Add GUI for managing multiple mountpoints. You don't have to use the terminal anymore if
+  you don't want to.
+- Fixed a crash during auth renewal after computer sleep.
+
 * Sat Jun 6 2020 Jeff Stafford <jeff.stafford@protonmail.com> - 0.9.1
 - Filenames are now sanitized when uploading new files.
 - onedriver now only syncs metadata changes for a file from server to client if its

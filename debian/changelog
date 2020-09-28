@@ -1,3 +1,11 @@
+onedriver (0.10.0-1) focal; urgency=low
+
+  * Add a GUI for managing multiple mountpoints. You don't have to use the
+    terminal anymore if you don't want to.
+  * Fixed a crash during auth renewal after computer sleep.
+
+ -- Jeff Stafford <jeff.stafford@protonmail.com>  Sat, 27 Sep 2020 21:29:00 -0400
+
 onedriver (0.9.1-1) focal; urgency=low
 
   * Filenames are now sanitized when uploading new files.
